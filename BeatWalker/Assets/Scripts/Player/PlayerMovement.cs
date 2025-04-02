@@ -13,8 +13,8 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundLayer;
 
-
-
+    public GameObject RunningSection;
+    public float sectionLength = 10f;
 
 
     void Start()
@@ -29,9 +29,7 @@ public class PlayerMovement : MonoBehaviour
         {
             body.velocity = new Vector2(body.velocity.x, JumpForce); // Apply only jump force
         }
-        else{
-            Debug.Log("not working");
-        }
+        
     }
 
     void FixedUpdate()
@@ -47,7 +45,29 @@ public class PlayerMovement : MonoBehaviour
         if (other.CompareTag("trigger"))
         {
             Debug.Log("Trigger has been triggered!");
+            SpawnNextSection();
         }
+
+    }
+
+     void SpawnNextSection()
+    {
+        // Get the Y position of the current running section
+        float yPosition = RunningSection.transform.position.y; 
+
+        // Spawn the new section at the same Y position
+        Vector2 spawnPosition = new Vector2(transform.position.x + sectionLength, yPosition);
+
+        // Instantiate the new section
+        GameObject newSection = Instantiate(RunningSection, spawnPosition, Quaternion.identity);
+
+        // Destroy the previous section after 4 seconds
+        Destroy(RunningSection, 4f);
+
+        // Update RunningSection to reference the new section
+        RunningSection = newSection;
+
+        Debug.Log("New Section Spawned at: " + spawnPosition); // Debugging
     }
 
     public bool isGrounded(){
