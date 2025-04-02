@@ -4,26 +4,36 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f;
     public Rigidbody2D body;
-   
+    public float JumpForce = 10f; // Adjust jump force as needed
+
     void Start()
     {
-        //allows us to control physics of gameobject - in fixed update we will use this to move player
         body = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    void Update()
+    {
+        // Jump when pressing Escape
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            body.velocity = new Vector2(body.velocity.x, JumpForce); // Apply only jump force
+        }
+    }
+
     void FixedUpdate()
     {
-        body.linearVelocity = new Vector2(speed, body.linearVelocity.x);
+        // Move the player forward while preserving Y velocity
+        body.velocity = new Vector2(speed, body.velocity.y);
     }
 
     void OnTriggerEnter2D(Collider2D other)
-{
-    Debug.Log("Collided with: " + other.name); // This checks if anything is detected
-
-    if (other.CompareTag("trigger"))
     {
-        Debug.Log("Trigger has been triggered!");
+        Debug.Log("Collided with: " + other.name);
+
+        if (other.CompareTag("trigger"))
+        {
+            Debug.Log("Trigger has been triggered!");
+        }
     }
 }
-}
+
