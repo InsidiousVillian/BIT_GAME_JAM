@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    private TrailRenderer _trailRenderer;
+
+  
     public float speed = 5f;
     public Rigidbody2D body;
     public float JumpForce = 10f; // Adjust jump force as needed
@@ -15,6 +19,14 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject RunningSection;
     public float sectionLength = 10f;
+
+    [SerializeField] private float _dashingVelocity = 14f;
+    [SerializeField] private float _dashingTime = 0.5f;
+    private Vector2 dashingDir; 
+    private bool _isDashing;
+    private bool _canDash;
+
+
 
 
     void Start()
